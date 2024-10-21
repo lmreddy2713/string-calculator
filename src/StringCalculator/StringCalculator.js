@@ -4,41 +4,43 @@ import './StringCalculator.css'; // Import the CSS for styling
 const StringCalculator = () => {
   const [input, setInput] = useState('');
   const [result, setResult] = useState(0);
-
-  const add = (numbers) => {
-    if (numbers === '') return 0;
-
-    const delimiters = [',', '\n'];
-    let delimiter = delimiters;
-
-    // Handle custom delimiter case
-    if (numbers.startsWith('//')) {
-      const delimiterEndIndex = numbers.indexOf('\n');
-      delimiter = [numbers.substring(2, delimiterEndIndex)];
-      numbers = numbers.substring(delimiterEndIndex + 1);
+  function sumString(str) {
+      const lines = str.split('\n');
+      const delimiter = lines[0].replace('//', '');
+      const numbers = lines[1].split(delimiter).map(Number);
+      return numbers.reduce((a, b) => a + b, 0);
     }
+    function addNumbersInString(str) {
+      
+      
+      const delimiters = [',', ';', ' ', '\t', '\n', '|', ':'];
+    
+      
+      const regex = new RegExp(delimiters.join('|'), 'g');
+    
+      
+      const parts = str.split(regex);
+    
+      if( parts.includes('-')){
+        throw new Error(`Negative numbers not allowed `);
+      }else{
 
-    const regex = new RegExp(`[${delimiter.join('')}]`);
-    const numArray = numbers.split(regex);
-
-    // Handle negative numbers
-    const negativeNumbers = numArray.filter(num => {
-      const n = parseInt(num);
-      return n < 0;
-    });
-
-    if (negativeNumbers.length > 0) {
-      throw new Error(`Negative numbers not allowed: ${negativeNumbers.join(', ')}`);
+    
+      const numbers = parts
+        .filter(part => part.trim() !== '') 
+        .map(Number) 
+        .filter(num => !isNaN(num)); 
+      
+      const sum = numbers.reduce((acc, num) => acc + num, 0);
+    
+      return sum;
+      }
+    
     }
-
-    // Calculate the sum
-    return numArray.reduce((sum, num) => sum + (parseInt(num) || 0), 0);
-  };
-
-  const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      setResult(add(input));
+      setResult(addNumbersInString(input));
     } catch (error) {
       alert(error.message);
     }
