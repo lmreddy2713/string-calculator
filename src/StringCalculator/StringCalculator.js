@@ -4,12 +4,7 @@ import './StringCalculator.css'; // Import the CSS for styling
 const StringCalculator = () => {
   const [input, setInput] = useState('');
   const [result, setResult] = useState(0);
-  function sumString(str) {
-      const lines = str.split('\n');
-      const delimiter = lines[0].replace('//', '');
-      const numbers = lines[1].split(delimiter).map(Number);
-      return numbers.reduce((a, b) => a + b, 0);
-    }
+
     function addNumbersInString(str) {
       
       
@@ -54,7 +49,7 @@ const StringCalculator = () => {
           type="text" 
           value={input} 
           onChange={(e) => setInput(e.target.value)} 
-          placeholder="Enter numbers separated by commas or new lines" 
+          placeholder="Enter numbers separated by delimiters" 
         />
         <button type="submit">Add</button>
       </form>
